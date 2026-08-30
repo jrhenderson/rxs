@@ -42,7 +42,13 @@ committed `.env`).
    to the same `generate-config.cjs` (which reads `process.env` before
    falling back to `.env`/defaults) — so the venue can be changed
    per-deployment without committing anything, and no `.env` file is needed
-   in CI at all.
+   in CI at all. Only `VENUE` needs a repo variable set; the rest fall back
+   to their defaults. This relies on `generate-config.cjs` treating an empty
+   string as "not set" (not just `null`/`undefined`): the workflow always
+   passes every key as an env var, and GitHub Actions resolves an unset
+   `vars.X` to `''` rather than omitting it — plain `??` would have baked
+   that empty string in over the default (and silently turned numeric
+   defaults into `0` via `Number('')`).
 4. `config.js` is gitignored (never committed) so different environments
    (a dev machine vs. a specific kiosk's CI build) can carry different
    venues without merge conflicts.

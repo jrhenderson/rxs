@@ -47,9 +47,13 @@ const fileEnv = fs.existsSync(ENV_PATH)
   ? parseEnvFile(fs.readFileSync(ENV_PATH, 'utf8'))
   : {};
 
+// Treats '' as "not set", not just null/undefined: the GitHub Actions
+// workflow always passes every key as an env var, and an unset repo
+// variable resolves to an empty string rather than being omitted — plain
+// `??` would bake that in as the value instead of falling back to DEFAULTS.
 const config = {};
 for (const key of Object.keys(DEFAULTS)) {
-  config[key] = process.env[key] ?? fileEnv[key] ?? DEFAULTS[key];
+  config[key] = process.env[key] || fileEnv[key] || DEFAULTS[key];
 }
 
 if (!config.VENUE) {
