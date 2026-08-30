@@ -1,0 +1,17 @@
+version: 2
+updates:
+  # deploy.yml pins actions/checkout, actions/setup-node,
+  # actions/upload-pages-artifact, actions/deploy-pages by major version —
+  # keep those current.
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+
+  # No runtime/dev dependencies today (package.json only declares scripts —
+  # see specs/001-rugby-scoreboard/plan.md's zero-dependency constraint),
+  # but keep this watching in case that changes.
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
