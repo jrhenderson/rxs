@@ -111,6 +111,7 @@ async function hydrateCrests(fixture, state) {
 const el = {
   board: document.getElementById('board'),
   venueName: document.getElementById('venueName'),
+  currentTime: document.getElementById('currentTime'),
   updatedIndicator: document.getElementById('updatedIndicator'),
   matchView: document.getElementById('matchView'),
   idleView: document.getElementById('idleView'),
@@ -134,6 +135,17 @@ const timeFormatter = new Intl.DateTimeFormat('en-AU', {
   hour: 'numeric',
   minute: '2-digit',
 });
+
+const clockFormatter = new Intl.DateTimeFormat('en-AU', {
+  timeZone: CONFIG.TIMEZONE,
+  hour: 'numeric',
+  minute: '2-digit',
+  second: '2-digit',
+});
+
+function renderClock() {
+  el.currentTime.textContent = clockFormatter.format(new Date());
+}
 
 function formatCountdown(ms) {
   if (ms <= 0) return null;
@@ -242,13 +254,15 @@ async function poll() {
   }
 }
 
-// Re-render every second while showing an upcoming match so the countdown
-// ticks without waiting for the next data poll.
+// Every second: tick the clock, and re-render while showing an upcoming
+// match so the countdown ticks without waiting for the next data poll.
 setInterval(() => {
+  renderClock();
   if (currentSelection.state === 'upcoming' && currentSelection.fixture) {
     render(currentSelection);
   }
 }, 1000);
+renderClock();
 
 // Kiosk stability: hard reload periodically, and never let one bad tick
 // (or an unrelated script error) permanently kill the display loop.

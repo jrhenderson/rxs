@@ -45,6 +45,16 @@ html, body {
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
+.current-time {
+  text-align: center;
+  font-size: 8vh;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+  color: var(--text);
+  padding-top: 3vh;
+}
+
 .updated-indicator {
   width: 1.4vh;
   height: 1.4vh;

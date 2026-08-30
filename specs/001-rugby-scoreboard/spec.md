@@ -62,7 +62,8 @@ configuration. The page is left open indefinitely and refreshes its own data.
      idle/branding state.
 3. Display, non-interactively: home/away team names + crests, score (when
    played), competition/grade name, round, venue, kickoff time (local),
-   and a status badge (UPCOMING / LIVE / FULL TIME / FORFEIT / etc.).
+   a status badge (UPCOMING / LIVE / FULL TIME / FORFEIT / etc.), and the
+   current wall-clock time in `TIMEZONE`, ticking live.
 4. Auto-refresh data on a configurable interval without any user action.
 5. Recover from transient network/API failures by retrying with backoff and
    continuing to show the last good data (with a small "last updated" /
@@ -95,7 +96,7 @@ configuration. The page is left open indefinitely and refreshes its own data.
 | `ENTITY_ID` | no | `30895` | SJRU association entity id. |
 | `ENTITY_TYPE` | no | `association` | Entity type for the query. |
 | `GRAPHQL_ENDPOINT` | no | `https://rugby-au-cms.graphcdn.app/` | API base URL. |
-| `REFRESH_INTERVAL_SECONDS` | no | `60` | Poll interval for data. |
+| `REFRESH_INTERVAL_SECONDS` | no | `5` | Poll interval for data. See plan.md's rate-limit note. |
 | `PRE_MATCH_WINDOW_MINUTES` | no | `30` | Minutes before kickoff a match becomes "current". |
 | `POST_MATCH_WINDOW_MINUTES` | no | `90` | Minutes after kickoff a finished match stays "current". |
 | `PAGE_RELOAD_HOURS` | no | `6` | Full hard page reload interval (kiosk stability). |

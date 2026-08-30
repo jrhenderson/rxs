@@ -126,6 +126,11 @@ committed `.env`).
 - A small corner indicator shows last-successful-update time and turns
   amber/red once `consecutiveFailures > 0` (never removes the last good
   match data).
+- A large clock in `CONFIG.TIMEZONE` (`renderClock()`) sits centered above
+  the match/idle content, ticked every second by the same interval that
+  drives the upcoming-match countdown — independent of the data poll, so it
+  stays accurate even while stale/erroring, and is visible in every state
+  (including idle).
 - Crest `<img>` has `onerror` fallback to a local placeholder in `assets/`
   (API crests are hotlinked third-party URLs and can 404/change).
 
@@ -162,9 +167,19 @@ committed `.env`).
   not specified by the user; chosen to comfortably cover a youth rugby
   match (typically well under 90 minutes total) plus a warm-up and a
   post-match lingering-scoreboard period. Configurable.
-- Default `REFRESH_INTERVAL_SECONDS=60`: the API is rate-limited per-IP
-  (observed `budget=500` requests per refill window in response headers);
-  60s keeps a single kiosk far under that limit while feeling responsive.
+- `REFRESH_INTERVAL_SECONDS=5` (explicit user request, overriding the
+  original default of 60): the API rate-limits on two axes per response
+  headers — a request-count budget (`budget=500`, refill ~4-5/sec, easily
+  sustained at this rate) and a query-complexity budget (`budget=1000000`,
+  ~880 points per real fixtures/results query, refill only ~9-10/sec). At
+  5s with up to 3 requests/cycle (results + fixtures + crest hydration),
+  complexity drains faster than it refills — sustained over many hours this
+  can trip the limit. This isn't fatal: a rejected poll is just a caught
+  error, so the existing backoff (`app.js` `poll()`) and stale-data
+  indicator (spec AC3) take over automatically rather than blanking the
+  display, and demand eases as soon as the budget recovers. Flagged here
+  rather than silently using a more conservative default, since it was an
+  explicit instruction.
 - Venue matching is exact-string (case-insensitive/trimmed) against the
   `venue` field as returned by the API, not fuzzy — venue names observed in
   live data are specific enough (e.g. `Nagle Park Field 2` vs `Field 1`)
