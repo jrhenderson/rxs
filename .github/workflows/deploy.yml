@@ -45,7 +45,7 @@ jobs:
           cp -r assets site/assets
           cp -r lib site/lib
 
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v5
         with:
           path: site
 
