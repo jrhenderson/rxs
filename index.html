@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SJRU Venue Scoreboard</title>
+  <link rel="icon" href="assets/favicon.svg" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main id="board" class="state-idle">
+    <header class="venue-bar">
+      <span id="venueName">&nbsp;</span>
+      <span id="updatedIndicator" class="updated-indicator"></span>
+    </header>
+
+    <section id="matchView" class="match-view" hidden>
+      <div class="comp-line">
+        <span id="compName"></span>
+        <span id="roundLabel"></span>
+      </div>
+
+      <div class="teams">
+        <div class="team team-home">
+          <img id="homeCrest" class="crest" alt="" onerror="this.src='assets/placeholder-crest.svg'" />
+          <div id="homeName" class="team-name"></div>
+          <div id="homeScore" class="team-score"></div>
+        </div>
+
+        <div class="mid">
+          <div id="statusBadge" class="status-badge"></div>
+          <div id="kickoffTime" class="kickoff-time"></div>
+          <div id="countdown" class="countdown"></div>
+        </div>
+
+        <div class="team team-away">
+          <img id="awayCrest" class="crest" alt="" onerror="this.src='assets/placeholder-crest.svg'" />
+          <div id="awayName" class="team-name"></div>
+          <div id="awayScore" class="team-score"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="idleView" class="idle-view">
+      <img src="assets/placeholder-crest.svg" class="idle-logo" alt="" />
+      <div id="idleMessage" class="idle-message">Loading&hellip;</div>
+    </section>
+  </main>
+
+  <script src="config.js"></script>
+  <script src="app.js" type="module"></script>
+</body>
+</html>

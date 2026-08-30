@@ -1,0 +1,12 @@
+{
+  "name": "rxs-scoreboard",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Non-interactive kiosk scoreboard for a single SJRU rugby venue, sourced from the xplorer.rugby GraphQL feed.",
+  "scripts": {
+    "build": "node scripts/generate-config.cjs",
+    "dev": "node scripts/generate-config.cjs && node scripts/serve.cjs",
+    "verify": "node scripts/verify-selection.js"
+  }
+}

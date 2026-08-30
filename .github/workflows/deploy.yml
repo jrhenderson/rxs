@@ -1,0 +1,60 @@
+name: Deploy scoreboard to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Generate config.js from repository variables
+        run: node scripts/generate-config.cjs
+        env:
+          VENUE: ${{ vars.VENUE }}
+          SEASON: ${{ vars.SEASON }}
+          ENTITY_ID: ${{ vars.ENTITY_ID }}
+          ENTITY_TYPE: ${{ vars.ENTITY_TYPE }}
+          GRAPHQL_ENDPOINT: ${{ vars.GRAPHQL_ENDPOINT }}
+          REFRESH_INTERVAL_SECONDS: ${{ vars.REFRESH_INTERVAL_SECONDS }}
+          PRE_MATCH_WINDOW_MINUTES: ${{ vars.PRE_MATCH_WINDOW_MINUTES }}
+          POST_MATCH_WINDOW_MINUTES: ${{ vars.POST_MATCH_WINDOW_MINUTES }}
+          PAGE_RELOAD_HOURS: ${{ vars.PAGE_RELOAD_HOURS }}
+          TIMEZONE: ${{ vars.TIMEZONE }}
+
+      - name: Assemble static site
+        run: |
+          mkdir -p site
+          cp index.html styles.css app.js config.js site/
+          cp -r assets site/assets
+          cp -r lib site/lib
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/deploy-pages@v4
+        id: deployment

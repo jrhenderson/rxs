@@ -1,0 +1,196 @@
+:root {
+  color-scheme: dark;
+  --bg: #0b1220;
+  --panel: #121c30;
+  --accent: #ffb020;
+  --live: #ff3b30;
+  --text: #f5f7fa;
+  --muted: #8a97ab;
+  --good: #34c759;
+  --stale: #ff9f0a;
+  --error: #ff453a;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+#board {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.venue-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5vh 3vw;
+  font-size: 2.4vh;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.updated-indicator {
+  width: 1.4vh;
+  height: 1.4vh;
+  border-radius: 50%;
+  background: var(--good);
+  box-shadow: 0 0 0.8vh currentColor;
+}
+.updated-indicator.stale {
+  background: var(--stale);
+  color: var(--stale);
+}
+.updated-indicator.error {
+  background: var(--error);
+  color: var(--error);
+}
+
+.match-view {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 2vh 3vw;
+}
+
+.comp-line {
+  text-align: center;
+  font-size: 3vh;
+  color: var(--muted);
+  margin-bottom: 3vh;
+  display: flex;
+  gap: 1.5vw;
+  justify-content: center;
+}
+
+.teams {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 4vw;
+}
+
+.team {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1.5vh;
+  min-width: 0;
+}
+
+.crest {
+  width: 18vh;
+  height: 18vh;
+  object-fit: contain;
+  filter: drop-shadow(0 0.4vh 1vh rgba(0, 0, 0, 0.4));
+}
+
+.team-name {
+  font-size: 3.6vh;
+  font-weight: 700;
+  line-height: 1.15;
+  max-width: 32vw;
+  overflow-wrap: break-word;
+}
+
+.team-score {
+  font-size: 9vh;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.mid {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5vh;
+  min-width: 16vw;
+}
+
+.status-badge {
+  padding: 0.8vh 2vw;
+  border-radius: 999px;
+  font-size: 2.2vh;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--muted);
+}
+.status-badge.live {
+  background: var(--live);
+  color: #fff;
+  animation: pulse 1.6s ease-in-out infinite;
+}
+.status-badge.full-time {
+  background: rgba(52, 199, 89, 0.18);
+  color: var(--good);
+}
+.status-badge.upcoming {
+  background: rgba(255, 176, 32, 0.18);
+  color: var(--accent);
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.55; }
+}
+
+.kickoff-time {
+  font-size: 2.4vh;
+  color: var(--muted);
+}
+
+.countdown {
+  font-size: 3.2vh;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.idle-view {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3vh;
+  text-align: center;
+  padding: 4vw;
+}
+
+.idle-logo {
+  width: 20vh;
+  height: 20vh;
+  object-fit: contain;
+  opacity: 0.75;
+}
+
+.idle-message {
+  font-size: 3.2vh;
+  color: var(--muted);
+  max-width: 70vw;
+}
+
+#board.state-idle .match-view {
+  display: none;
+}
+#board:not(.state-idle) .idle-view {
+  display: none;
+}
