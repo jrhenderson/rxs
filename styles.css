@@ -81,7 +81,8 @@ html, body {
 
 .comp-line {
   text-align: center;
-  font-size: 3vh;
+  font-size: 4.4vh;
+  font-weight: 600;
   color: var(--muted);
   margin-bottom: 3vh;
   display: flex;
@@ -106,8 +107,8 @@ html, body {
 }
 
 .crest {
-  width: 18vh;
-  height: 18vh;
+  width: 28vh;
+  height: 28vh;
   object-fit: contain;
   filter: drop-shadow(0 0.4vh 1vh rgba(0, 0, 0, 0.4));
 }

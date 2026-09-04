@@ -133,6 +133,15 @@ committed `.env`).
   (including idle).
 - Crest `<img>` has `onerror` fallback to a local placeholder in `assets/`
   (API crests are hotlinked third-party URLs and can 404/change).
+- Target hardware (per user, confirmed 2026-09-04): a full 1080p LED
+  scoreboard panel driven by direct HDMI (kiosk PC's output = the panel,
+  no separate video processor pinning a different fixed resolution) — so
+  crests render at full photographic fidelity, not just as flat shapes,
+  and the existing `vh`/`vw`-relative CSS needs no aspect-ratio rework.
+  Crest size (`.crest` in `styles.css`) was bumped from 18vh to 28vh, and
+  the competition/round line (`.comp-line`) from 3vh to 4.4vh (plus
+  semi-bold weight), for legibility at oval-side viewing distance on this
+  panel.
 
 ## Deployment (GitHub Pages)
 
