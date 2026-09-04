@@ -32,10 +32,12 @@ async function fetchList(type, comps) {
 
 // Mirrors app.js's hydrateCrests: the association-wide query only ever
 // returns one generic shared crest for every team; scoping to the match's
-// specific competition returns real per-team crests.
-async function hydrateCrests(fixture, state) {
+// specific competition returns real per-team crests. Queries by `source`
+// (which raw list the fixture came from), not display `state` — a 'live'
+// match can still only exist in the fixtures list.
+async function hydrateCrests(fixture, source) {
   if (!fixture) return fixture;
-  const type = state === 'upcoming' ? 'fixtures' : 'results';
+  const type = source === 'fixture' ? 'fixtures' : 'results';
   const compScoped = await fetchList(type, [{ id: fixture.compId }]);
   return compScoped.find((f) => f.id === fixture.id) || fixture;
 }
@@ -56,7 +58,7 @@ async function main() {
     const selection = findVenueMatch(results, fixtures, venue, Date.now(), windows);
     if (selection.fixture) {
       const before = selection.fixture.homeTeam?.crest;
-      const hydrated = await hydrateCrests(selection.fixture, selection.state);
+      const hydrated = await hydrateCrests(selection.fixture, selection.source);
       const after = hydrated.homeTeam?.crest;
       console.log(`VENUE="${venue}" ->`, selection.state,
         `| ${hydrated.homeTeam?.name} vs ${hydrated.awayTeam?.name} (${hydrated.dateTime})`);

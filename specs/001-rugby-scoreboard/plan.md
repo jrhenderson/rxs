@@ -94,19 +94,29 @@ committed `.env`).
      after kickoff). Trusting only `isLive` left the scoreboard blanking a
      live score under the `upcoming` render branch — wall-clock time is the
      more reliable signal here.
-  6. Returns `{ state: 'live'|'current'|'upcoming'|'recent'|'idle', fixture }`.
-- `hydrateCrests(fixture, state)`: the association-wide query above (`comps:
-  []`) only ever returns one generic shared placeholder crest for every
-  team — verified live across a full season, no exceptions. Scoping the
-  *same* query to the selected match's specific competition (`comps: [{ id:
-  fixture.compId }]`) returns each team's real linked crest. So once
+  6. Returns `{ state: 'live'|'current'|'upcoming'|'recent'|'idle', fixture,
+     source: 'result'|'fixture'|null }` — `source` says which raw list the
+     fixture actually came from, independent of `state`. Needed because a
+     `live` match (see step 5) can still only exist in the fixtures list,
+     not yet in results.
+- `hydrateCrests(fixture, source)`: the association-wide query above
+  (`comps: []`) only ever returns one generic shared placeholder crest for
+  every team — verified live across a full season, no exceptions. Scoping
+  the *same* query to the selected match's specific competition (`comps:
+  [{ id: fixture.compId }]`) returns each team's real linked crest. So once
   `findVenueMatch` picks a fixture, `app.js` re-queries once more scoped to
-  that one competition (`type` matching the selection: `fixtures` for
-  `upcoming`, else `results`; limit 60, comfortably covers one grade's whole
-  season) and looks up the same `id` in that richer result to use for
-  rendering. Falls back to the original (generic-crest) fixture if the
-  lookup fails or doesn't find the id, so a hydration hiccup never blanks
-  the display.
+  that one competition (`type` = `'fixtures'` when `source === 'fixture'`,
+  else `'results'`; limit 60, comfortably covers one grade's whole season)
+  and looks up the same `id` in that richer result to use for rendering.
+  Falls back to the original (generic-crest) fixture if the lookup fails or
+  doesn't find the id, so a hydration hiccup never blanks the display.
+  **Bug fixed**: this was originally keyed off display `state`
+  (`'upcoming' -> 'fixtures'`, else `'results'`), which broke the moment
+  `state: 'live'` could come from a fixture-sourced match (see step 5) —
+  the hydration query went to `results`, didn't find the id (the match
+  wasn't there yet), and silently fell back to the generic crest on an
+  actively live match. Reported by user, reproduced against the live match
+  that triggered it, fixed by keying off `source` instead of `state`.
 - Polling: `setInterval` at `REFRESH_INTERVAL_SECONDS`, plus an immediate
   fetch on load. Each poll is wrapped in try/catch; failures increment a
   `consecutiveFailures` counter driving a stale-data indicator (spec AC3)
@@ -196,7 +206,14 @@ committed `.env`).
   indicator (spec AC3) take over automatically rather than blanking the
   display, and demand eases as soon as the budget recovers. Flagged here
   rather than silently using a more conservative default, since it was an
-  explicit instruction.
+  explicit instruction. **Confirmed, not just theoretical**: this session's
+  local dev server alone, left polling at 5s in the background for an
+  extended stretch while other verification also hit the same API, fully
+  exhausted the request-count budget (`remainingBudget: 0`) and started
+  getting rejected — recovered within ~20s once that one instance stopped
+  polling. A single kiosk is a much lighter, steadier load than that
+  combination, but this is a real, observed ceiling, not just a header
+  reading.
 - Venue matching is exact-string (case-insensitive/trimmed) against the
   `venue` field as returned by the API, not fuzzy — venue names observed in
   live data are specific enough (e.g. `Nagle Park Field 2` vs `Field 1`)

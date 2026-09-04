@@ -95,10 +95,15 @@ async function fetchVenueData() {
 // Scoping the same query to the selected match's specific competition
 // returns each team's real linked crest — so once a match is chosen, fetch
 // it again scoped to its comp and use that richer copy for rendering.
-async function hydrateCrests(fixture, state) {
+async function hydrateCrests(fixture, source) {
   if (!fixture || !fixture.compId) return fixture;
   try {
-    const type = state === 'upcoming' ? 'fixtures' : 'results';
+    // Must query whichever list the fixture actually came from — a 'live'
+    // match can still only exist in the fixtures list (see
+    // lib/selectMatch.js), so inferring the list from display state instead
+    // of this provenance would silently return no match and fall back to
+    // the generic crest.
+    const type = source === 'fixture' ? 'fixtures' : 'results';
     const compScoped = await fetchEntityList(type, 60, [{ id: fixture.compId }]);
     const hydrated = compScoped.find((f) => f.id === fixture.id);
     return hydrated || fixture;
@@ -240,7 +245,7 @@ async function poll() {
       preMs: PRE_MS,
       postMs: POST_MS,
     });
-    selection.fixture = await hydrateCrests(selection.fixture, selection.state);
+    selection.fixture = await hydrateCrests(selection.fixture, selection.source);
     render(selection);
   } catch (err) {
     consecutiveFailures += 1;
