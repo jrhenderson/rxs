@@ -81,19 +81,29 @@ committed `.env`).
      Match" for the rest of the year once the real season is finished.
   4. Compute eligibility windows from `PRE_MATCH_WINDOW_MINUTES` /
      `POST_MATCH_WINDOW_MINUTES` around each candidate's `dateTime`.
-  5. Selection priority: any candidate with `isLive === true` > a candidate
-     whose window contains `now` (prefer the result over the fixture if both
-     somehow qualify, since a result means it already has a score) > nearest
-     upcoming fixture ("Next Match" state) > latest past result ("Last
-     Result" state) > idle (no data for venue at all in season). A
-     fixture-sourced candidate within its window is `live` once `now` has
-     passed its kickoff, `upcoming` before it — **not** gated on `isLive`.
-     Verified live: `isLive` can still read `false`, with `status` still
-     `"Fixture"`, on a match that has visibly kicked off and already has a
-     real score on `homeTeam`/`awayTeam.score` (observed: 5–0 seven minutes
-     after kickoff). Trusting only `isLive` left the scoreboard blanking a
-     live score under the `upcoming` render branch — wall-clock time is the
-     more reliable signal here.
+  5. Selection priority: any candidate with `isLive === true` > whichever
+     in-window candidate kicked off most recently > nearest upcoming
+     fixture ("Next Match" state) > latest past result ("Last Result"
+     state) > idle (no data for venue at all in season). A fixture-sourced
+     candidate within its window is `live` once `now` has passed its
+     kickoff, `upcoming` before it — **not** gated on `isLive`. Verified
+     live: `isLive` can still read `false`, with `status` still `"Fixture"`,
+     on a match that has visibly kicked off and already has a real score on
+     `homeTeam`/`awayTeam.score` (observed: 5–0 seven minutes after
+     kickoff). Trusting only `isLive` left the scoreboard blanking a live
+     score under the `upcoming` render branch — wall-clock time is the more
+     reliable signal here.
+     **Bug fixed**: back-to-back matches at the same venue routinely
+     overlap — the previous result's post-match window and the next
+     fixture's pre-match window both contain `now` at once (verified live:
+     a finished match's 90-min window was still open when the next game at
+     the same venue kicked off). Originally picked whichever candidate came
+     first in array order, which was always the previous *result* (built as
+     `[latestResult, nextFixture]`) — so the display froze on an old
+     finished score and never advanced to the new live match. Reported by
+     user ("page has not automatically transitioned to the next live
+     game"), reproduced against the exact overlap, fixed by preferring the
+     in-window candidate with the later kickoff.
   6. Returns `{ state: 'live'|'current'|'upcoming'|'recent'|'idle', fixture,
      source: 'result'|'fixture'|null }` — `source` says which raw list the
      fixture actually came from, independent of `state`. Needed because a
