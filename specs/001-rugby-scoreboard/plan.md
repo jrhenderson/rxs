@@ -85,7 +85,15 @@ committed `.env`).
      whose window contains `now` (prefer the result over the fixture if both
      somehow qualify, since a result means it already has a score) > nearest
      upcoming fixture ("Next Match" state) > latest past result ("Last
-     Result" state) > idle (no data for venue at all in season).
+     Result" state) > idle (no data for venue at all in season). A
+     fixture-sourced candidate within its window is `live` once `now` has
+     passed its kickoff, `upcoming` before it — **not** gated on `isLive`.
+     Verified live: `isLive` can still read `false`, with `status` still
+     `"Fixture"`, on a match that has visibly kicked off and already has a
+     real score on `homeTeam`/`awayTeam.score` (observed: 5–0 seven minutes
+     after kickoff). Trusting only `isLive` left the scoreboard blanking a
+     live score under the `upcoming` render branch — wall-clock time is the
+     more reliable signal here.
   6. Returns `{ state: 'live'|'current'|'upcoming'|'recent'|'idle', fixture }`.
 - `hydrateCrests(fixture, state)`: the association-wide query above (`comps:
   []`) only ever returns one generic shared placeholder crest for every
