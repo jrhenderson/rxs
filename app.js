@@ -152,6 +152,13 @@ function renderClock() {
   el.currentTime.textContent = clockFormatter.format(new Date());
 }
 
+// The API returns "" (not null/undefined) for a team's score before any
+// points are on the board, so a plain `?? '0'` fallback never catches it —
+// a just-started live match displayed a blank scoreline instead of 0.
+function scoreText(score) {
+  return score === '' || score == null ? '0' : score;
+}
+
 function formatCountdown(ms) {
   if (ms <= 0) return null;
   const totalMinutes = Math.floor(ms / 60000);
@@ -201,16 +208,16 @@ function render(selection) {
   if (state === 'live') {
     el.statusBadge.classList.add('live');
     el.statusBadge.textContent = 'Live';
-    el.homeScore.textContent = fixture.homeTeam?.score ?? '0';
-    el.awayScore.textContent = fixture.awayTeam?.score ?? '0';
+    el.homeScore.textContent = scoreText(fixture.homeTeam?.score);
+    el.awayScore.textContent = scoreText(fixture.awayTeam?.score);
   } else if (state === 'current' || state === 'recent') {
     el.statusBadge.classList.add('full-time');
     const label = fixture.status && fixture.status !== 'Result'
       ? fixture.status.toUpperCase()
       : 'Full Time';
     el.statusBadge.textContent = label;
-    el.homeScore.textContent = fixture.homeTeam?.score ?? '-';
-    el.awayScore.textContent = fixture.awayTeam?.score ?? '-';
+    el.homeScore.textContent = scoreText(fixture.homeTeam?.score);
+    el.awayScore.textContent = scoreText(fixture.awayTeam?.score);
   } else {
     // upcoming
     el.homeScore.textContent = '';

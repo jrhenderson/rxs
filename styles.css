@@ -38,7 +38,7 @@ html, body {
   align-items: center;
   justify-content: space-between;
   padding: 1.5vh 3vw;
-  font-size: 2.4vh;
+  font-size: 2.8vh;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--muted);
@@ -47,12 +47,12 @@ html, body {
 
 .current-time {
   text-align: center;
-  font-size: 8vh;
+  font-size: 8.5vh;
   font-weight: 800;
   font-variant-numeric: tabular-nums;
   letter-spacing: 0.04em;
   color: var(--text);
-  padding-top: 3vh;
+  padding-top: 2vh;
 }
 
 .updated-indicator {
@@ -81,7 +81,7 @@ html, body {
 
 .comp-line {
   text-align: center;
-  font-size: 4.4vh;
+  font-size: 5vh;
   font-weight: 600;
   color: var(--muted);
   margin-bottom: 3vh;
@@ -107,14 +107,14 @@ html, body {
 }
 
 .crest {
-  width: 28vh;
-  height: 28vh;
+  width: 36vh;
+  height: 36vh;
   object-fit: contain;
   filter: drop-shadow(0 0.4vh 1vh rgba(0, 0, 0, 0.4));
 }
 
 .team-name {
-  font-size: 3.6vh;
+  font-size: 4.6vh;
   font-weight: 700;
   line-height: 1.15;
   max-width: 32vw;
@@ -122,7 +122,7 @@ html, body {
 }
 
 .team-score {
-  font-size: 9vh;
+  font-size: 13vh;
   font-weight: 800;
   font-variant-numeric: tabular-nums;
 }
@@ -138,7 +138,7 @@ html, body {
 .status-badge {
   padding: 0.8vh 2vw;
   border-radius: 999px;
-  font-size: 2.2vh;
+  font-size: 2.8vh;
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -165,12 +165,12 @@ html, body {
 }
 
 .kickoff-time {
-  font-size: 2.4vh;
+  font-size: 2.8vh;
   color: var(--muted);
 }
 
 .countdown {
-  font-size: 3.2vh;
+  font-size: 3.8vh;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
 }
@@ -187,14 +187,14 @@ html, body {
 }
 
 .idle-logo {
-  width: 20vh;
-  height: 20vh;
+  width: 26vh;
+  height: 26vh;
   object-fit: contain;
   opacity: 0.75;
 }
 
 .idle-message {
-  font-size: 3.2vh;
+  font-size: 4vh;
   color: var(--muted);
   max-width: 70vw;
 }

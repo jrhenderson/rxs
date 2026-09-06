@@ -169,7 +169,17 @@ committed `.env`).
   Crest size (`.crest` in `styles.css`) was bumped from 18vh to 28vh, and
   the competition/round line (`.comp-line`) from 3vh to 4.4vh (plus
   semi-bold weight), for legibility at oval-side viewing distance on this
-  panel.
+  panel. Bumped further on user request (2026-09-06): crests 28vh -> 36vh,
+  team-score 9vh -> 13vh, and most other text 15-25% larger (venue bar,
+  comp-line, team names, status badge, kickoff time, countdown, idle
+  message) — sized up together to keep the visual hierarchy intact rather
+  than any one element dominating. All still comfortably fit 1080p without
+  overflow (verified via screenshot).
+- Score rendering treats `''` (the API's actual value for a team with no
+  points yet, not `null`/`undefined`) as `0`, not blank — `scoreText()` in
+  `app.js`. A plain `?? '0'` fallback never caught this since `''` isn't
+  nullish, so a just-started live match showed an empty scoreline instead
+  of `0–0` until this was fixed.
 
 ## Deployment (GitHub Pages)
 
