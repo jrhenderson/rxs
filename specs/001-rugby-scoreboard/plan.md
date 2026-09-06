@@ -174,7 +174,15 @@ committed `.env`).
   comp-line, team names, status badge, kickoff time, countdown, idle
   message) — sized up together to keep the visual hierarchy intact rather
   than any one element dominating. All still comfortably fit 1080p without
-  overflow (verified via screenshot).
+  overflow (verified via screenshot). Crests bumped again same day, 36vh
+  -> 40vh: an initial attempt at 44vh clipped the score off the bottom of
+  the viewport (`overflow: hidden` on `html`/`body` means overflow is
+  silently cut off, not scrollable — caught via screenshot, not by eye).
+  Reclaimed room by trimming `.current-time` (8.5vh -> 7vh, less padding),
+  `.match-view` padding, `.comp-line` margin, and `.team` gap instead of
+  just shrinking the crest back down, since the ask was specifically for
+  bigger crests. Re-verified against the same two-line team-name case that
+  clipped, at full 1080p.
 - Score rendering treats `''` (the API's actual value for a team with no
   points yet, not `null`/`undefined`) as `0`, not blank — `scoreText()` in
   `app.js`. A plain `?? '0'` fallback never caught this since `''` isn't

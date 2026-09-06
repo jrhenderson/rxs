@@ -47,12 +47,12 @@ html, body {
 
 .current-time {
   text-align: center;
-  font-size: 8.5vh;
+  font-size: 7vh;
   font-weight: 800;
   font-variant-numeric: tabular-nums;
   letter-spacing: 0.04em;
   color: var(--text);
-  padding-top: 2vh;
+  padding-top: 0.5vh;
 }
 
 .updated-indicator {
@@ -76,7 +76,7 @@ html, body {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 2vh 3vw;
+  padding: 1vh 3vw;
 }
 
 .comp-line {
@@ -84,7 +84,7 @@ html, body {
   font-size: 5vh;
   font-weight: 600;
   color: var(--muted);
-  margin-bottom: 3vh;
+  margin-bottom: 2vh;
   display: flex;
   gap: 1.5vw;
   justify-content: center;
@@ -102,13 +102,13 @@ html, body {
   flex-direction: column;
   align-items: center;
   text-align: center;
-  gap: 1.5vh;
+  gap: 1vh;
   min-width: 0;
 }
 
 .crest {
-  width: 36vh;
-  height: 36vh;
+  width: 40vh;
+  height: 40vh;
   object-fit: contain;
   filter: drop-shadow(0 0.4vh 1vh rgba(0, 0, 0, 0.4));
 }
